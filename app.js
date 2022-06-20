@@ -11,14 +11,20 @@ const uuidv4 = function () {
     });
 }
 
+
 // get all todos
 app.get('/external/id', (req, res) => {
 
+    
+    const sessionid = uuidv4()
+
     if(charge == 1) {
+
+        console.log('sending session id ' + sessionid)
 
         res.status(200).send({
             success: 'true',
-            session: uuidv4(),
+            session: sessionid,
             status: charge
         })
     } else {
