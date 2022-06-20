@@ -23,9 +23,7 @@ app.get('/external/id', (req, res) => {
         console.log('sending session id ' + sessionid)
 
         res.status(200).send({
-            success: 'true',
-            session: sessionid,
-            status: charge
+            sessionId: sessionid
         })
     } else {
         
