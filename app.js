@@ -12,15 +12,15 @@ const uuidv4 = function () {
 }
 
 
-// get all todos
-app.get('/external/id', (req, res) => {
+// EXTERNAL
+app.get('/external/' + process.env.EXTID + '/start', (req, res) => {
 
     
     const sessionid = uuidv4()
 
     if(charge == 1) {
 
-        console.log('sending session id ' + sessionid)
+        console.log('sending GET session id ' + sessionid)
 
         res.status(200).send({
             sessionId: sessionid
@@ -34,8 +34,36 @@ app.get('/external/id', (req, res) => {
     }
 });
 
-// get all todos
-app.get('/internal/on', (req, res) => {
+app.post('/external/' + process.env.EXTID + '/start', (req, res) => {
+
+    
+    const sessionid = uuidv4()
+
+    if(charge == 1) {
+
+        console.log('sending POST session id ' + sessionid)
+
+        res.status(200).send({
+            sessionId: sessionid
+        })
+    } else {
+        
+        res.status(401).send({
+            success: 'false',
+            status: charge
+        })
+    }
+});
+
+
+app.post('/external/' + process.env.EXTID + '/end', (req, res) => {
+
+    console.log(req);
+
+})
+
+// INTERNAL
+app.get('/internal/' + process.env.INTID + '/on', (req, res) => {
     charge="1";
     res.status(200).send({
         success: 'true',
@@ -43,8 +71,8 @@ app.get('/internal/on', (req, res) => {
     })
   });
 
-// get all todos
-app.get('/internal/off', (req, res) => {
+  
+app.get('/internal/' + process.env.INTID + '/off', (req, res) => {
     charge="0";
     res.status(200).send({
         success: 'true',
