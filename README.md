@@ -46,6 +46,8 @@ End:
 
 https://zaptec.mydomain.com/external/djS8b9wGb7Q6RyA8cUa4VtvHGFLUbAEp5rRWdfKX8Gs7h9uyssb95xk935L8tUwf/end
 
+I have a Zaptec Go, it flashes white while waiting for authorization. It takes a few minutes for the Zaptec Cloud to pick up the authentication (patience!), then the charging box should turn blue.
+
 Generate random ids for obfuscation instead of my examples
 Start it with node for validation if you want:
 ```
