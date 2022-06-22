@@ -1,0 +1,48 @@
+version: "3.8"
+
+#docker stack deploy -c zaptecwebhook.yml zaptecwebhook
+#internal http://192.168.1.100:91/internal/ij2YChMgxNBTfQtH5Qv6U7oQPv2kdPnWgrjMs8iwKebkh5UVnnZ6UMdaNCMVunen/on
+#internal http://192.168.1.100:91/internal/ij2YChMgxNBTfQtH5Qv6U7oQPv2kdPnWgrjMs8iwKebkh5UVnnZ6UMdaNCMVunen/off
+#external https://zaptec.mydomain.com/external/djS8b9wGb7Q6RyA8cUa4VtvHGFLUbAEp5rRWdfKX8Gs7h9uyssb95xk935L8tUwf/start
+#external https://zaptec.mydomain.com/external/djS8b9wGb7Q6RyA8cUa4VtvHGFLUbAEp5rRWdfKX8Gs7h9uyssb95xk935L8tUwf/end
+
+services:
+
+  zaptecwebhook:
+    image: erikadvectas/zaptecwebhook
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - INTID=ij2YChMgxNBTfQtH5Qv6U7oQPv2kdPnWgrjMs8iwKebkh5UVnnZ6UMdaNCMVunen
+      - EXTID=djS8b9wGb7Q6RyA8cUa4VtvHGFLUbAEp5rRWdfKX8Gs7h9uyssb95xk935L8tUwf
+    deploy:
+      restart_policy:
+        condition: any
+        delay: 90s
+        max_attempts: 1000
+        window: 240s
+      placement:
+        constraints: [node.labels.type==rpi]
+      labels:
+        - cioban.auto-update=true # auto updater
+        - traefik.enable=true
+        - traefik.docker.network=network_traefik_public
+        - traefik.constraint-label=network_traefik_public
+        - traefik.http.routers.zaptecwebhook-rtr.rule=Host(`zaptec.mydomain.com`) && PathPrefix(`/external`)
+        - traefik.http.routers.zaptecwebhook-rtr.entrypoints=websecure
+        - traefik.http.routers.zaptecwebhook-rtr.tls=true
+        - traefik.http.routers.zaptecwebhook-rtr.tls.certresolver=letsencryptresolver
+        - traefik.http.services.zaptecwebhook-lb.loadbalancer.passhostheader=true
+        - traefik.http.services.zaptecwebhook-lb.loadbalancer.server.port=5000
+        - traefik.http.services.zaptecwebhook-lb.loadbalancer.sticky=true
+        - traefik.http.routers.zaptecwebhook-rtr.middlewares=middlewares-secure-headers@file
+    networks:
+      - network_traefik_public
+    ports:
+      - 91:5000 
+
+
+
+networks:
+  network_traefik_public:
+    external: true
