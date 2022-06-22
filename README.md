@@ -16,7 +16,7 @@ More info at https://zaptec.com/downloads/ZapChargerPro_Integration.pdf
 
 Main reasons for using a docker container instead of a custom component for HA:
  - Not familiar enough in python
- - Can expose the external url fully (read only), instead of limiting access (my HA instance has an ip-allowlist)
+ - Can expose the external url fully (read only) with a reverse proxy (e.g. Traefik), instead of limiting access (my HA instance has an ip-allowlist)
 
 ## Example configuration.yaml entry in Home Assistant
 
@@ -54,5 +54,5 @@ Start it with node for validation if you want:
 INTID=ij2YChMgxNBTfQtH5Qv6U7oQPv2kdPnWgrjMs8iwKebkh5UVnnZ6UMdaNCMVunen EXTID=djS8b9wGb7Q6RyA8cUa4VtvHGFLUbAEp5rRWdfKX8Gs7h9uyssb95xk935L8tUwf node app.js
 ```
 
-In this directory, a Dockerfile for building and a service example exists (I am using Docker Swarm).
+In this directory, a Dockerfile for building and a service example exists (I am using Docker Swarm). Traefik Reverse Proxy exposes this service online.
 Container at https://hub.docker.com/r/erikadvectas/zaptecwebhook 
