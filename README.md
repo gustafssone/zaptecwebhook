@@ -10,8 +10,8 @@ The built in options for starting charging on a Zaptec charger are:
  - OCPP-J 1.6 (there is a custom component directory in HA, _should work_, but haven't got it to work)
 
 This container allows us to call an URL to start charging on demand, i.e. when electricity prices are low.
-We can start it from Home Assistant.
-The URL is just responding with a start command according to zaptec API.
+We can start it from Home Assistant with a restful command.
+The URL is just responding with a start command according to zaptec API, only sending a HTTP status code 200 with a random sessionId.
 More info at https://zaptec.com/downloads/ZapChargerPro_Integration.pdf
 
 Main reasons for using a docker container instead of a custom component for HA:
@@ -30,7 +30,7 @@ rest_command:
     method: get
 ```
 
-Remember to add an automation to turn it off!
+Remember to add an automation to turn it off.
 
 In Zaptec Portal UI add the public URLs:
 
