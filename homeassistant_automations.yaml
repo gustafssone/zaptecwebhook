@@ -1,0 +1,56 @@
+#turn on charging
+- alias: Turn_on_charging_car_by_el
+  trigger:
+    - platform: state
+      entity_id: sensor.electricity_price_level
+      to: VERY_CHEAP
+    - platform: time_pattern
+      minutes: '/10'
+  condition:
+    alias: "not charging and cheap energy"
+    condition: and
+    conditions:
+      - condition: numeric_state
+        entity_id: sensor.electricity_price_w_tax
+        below: 1
+      - condition: state
+        state: 'Waiting'
+        entity_id: sensor.zaptec_01_mode
+  action:
+  #includes rest_command.start_carcharging1
+  - service: script.turn_on
+    data:
+      entity_id: script.zaptec_01_resume_charging
+
+
+#turn on charging
+- alias: Turn_on_charging_car_by_time
+  trigger:
+    - platform: time
+      at: "00:01:00"
+  condition:
+    alias: "not charging"
+    condition: or
+    conditions:
+      - condition: state
+        state: 'Finished'
+        entity_id: sensor.zaptec_01_mode
+      - condition: state
+        state: 'Waiting'
+        entity_id: sensor.zaptec_01_mode
+  action:
+  #includes rest_command.start_carcharging1
+  - service: script.turn_on
+    data:
+      entity_id: script.zaptec_01_resume_charging
+
+#turn off charging
+- alias: Turn_off_charging_auth
+  trigger:
+  - platform: state
+    entity_id: sensor.zaptec_01_mode
+    to: "Finished"
+    for: "00:30:00"
+  action:
+  #includes rest_command.start_carcharging1
+  - service: rest_command.end_carcharging1

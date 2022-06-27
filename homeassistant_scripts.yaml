@@ -1,0 +1,17 @@
+zaptec_01_resume_charging:
+  alias: "Zaptec 01 Resume Charging"
+  sequence:
+
+    - service: rest_command.start_carcharging1
+    - service: zaptec.resume_charging
+      data:
+        charger_id: yyyyyyyy-9999-99xx-xxxx-yyyyyyyyyyyy
+
+zaptec_01_stop_pause_charging:
+  alias: "Zaptec 01 Stop Pause Charging"
+  sequence:
+
+    - service: rest_command.end_carcharging1
+    - service: zaptec.stop_pause_charging
+      data:
+        charger_id: yyyyyyyy-9999-99xx-xxxx-yyyyyyyyyyyy

@@ -30,7 +30,7 @@ rest_command:
     method: get
 ```
 
-Remember to add an automation to turn it off.
+Remember to add an automation to turn it off, attached in file homeassistant_automations.yaml are examples.
 
 In Zaptec Portal UI add the public URLs:
 
