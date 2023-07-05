@@ -56,3 +56,35 @@ INTID=ij2YChMgxNBTfQtH5Qv6U7oQPv2kdPnWgrjMs8iwKebkh5UVnnZ6UMdaNCMVunen EXTID=djS
 
 In this directory, a Dockerfile for building and a service example exists (I am using Docker Swarm). Traefik Reverse Proxy exposes this service online.
 Container at https://hub.docker.com/r/erikadvectas/zaptecwebhook 
+
+## Full start flow
+```
+zaptec_01_resume_charging:
+  alias: "Zaptec 01 Resume Charging"
+  sequence:
+      #Cable is connected to car
+      #Zaptec is waiting for the webhook to start charging
+      #HA says to this container through a rest command that it is OK to start charging
+    - service: rest_command.start_carcharging1
+      #HA sends start charging through https://github.com/custom-components/zaptec
+      #Technically Zaptec Cloud already tries to do this, but this forces an update to check if webhook is set to start
+    - service: zaptec.resume_charging
+      data:
+        charger_id: yyyyyyyy-9999-99xx-xxxx-yyyyyyyyyyyy
+      #Charging should start, sometimes immediately, sometimes 20 minutes later
+```
+
+## Manual stop flow
+```
+zaptec_01_stop_pause_charging:
+  alias: "Zaptec 01 Stop Pause Charging"
+  sequence:
+      #Currently charging...
+      #HA tells container through a rest command that it is no longer accepting start commands
+      #If not done - Zaptec would immediately start charging next time cable is connected
+    - service: rest_command.end_carcharging1
+      #Actually tells Zaptec to manually stop charging
+    - service: zaptec.stop_pause_charging
+      data:
+        charger_id: yyyyyyyy-9999-99xx-xxxx-yyyyyyyyyyyy
+```
